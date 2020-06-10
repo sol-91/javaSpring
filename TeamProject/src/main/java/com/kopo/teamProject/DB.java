@@ -29,7 +29,7 @@ public class DB {
 		public boolean open() {
 			try {
 				SQLiteConfig config = new SQLiteConfig();
-				//sqlite를 사용하여, this.dbFIleName에 입력된 db파일과 연결
+				//sqlite瑜� �궗�슜�븯�뿬, this.dbFIleName�뿉 �엯�젰�맂 db�뙆�씪怨� �뿰寃�
 				this.connection = DriverManager.getConnection("jdbc:sqlite:/" + this.dbFileName, config.toProperties());
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -50,10 +50,10 @@ public class DB {
 			return true;
 		}	
 		public class delect {
-			public void deleteData(String id) throws SQLException{
+			public void deleteData(Teacher teacher) throws SQLException{
 				String query = "DELETE FROM " + this.dbTableName + " WHERE id=?;";
 				PreparedStatement preparedStatement = this.connection.prepareStatement(query);
-				preparedStatement.setString(1, id);
+				preparedStatement.setString(1, teacher.id);
 				preparedStatement.executeUpdate();
 				preparedStatement.close();
 			}
@@ -68,5 +68,20 @@ public class DB {
 			Statement statement = this.connection.createStatement();
 			statement.executeUpdate(insertQuery);
 			statement.close();
+		}
+		public boolean login(String id, String pw) throws SQLException {
+			boolean result = false;
+			String query = "SELECT * FROM " + this.dbTableName + " WHERE " + "id=? AND pw=?";
+			PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+			//string 변수를 ?의 첫번째 인덱스에 id 값을, 두번째 인덱스에 password를 입력함
+			preparedStatement.setString(1, id);
+			preparedStatement.setString(2, pw);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				result = true;
+			}
+			resultSet.close();
+			preparedStatement.close();
+			return result;
 		}
 }

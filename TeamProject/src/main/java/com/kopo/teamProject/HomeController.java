@@ -1,12 +1,14 @@
 package com.kopo.teamProject;
 
 import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,11 +44,11 @@ public class HomeController {
 	}
 	
 	
-//	김재영
+//	源��옱�쁺
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String tabledelete(Locale locale, Model model, HttpServletRequest request) {
 		String id = (String) request.getParameter("id");
-		//idx의 경우 int로 받을수도 있지만 기본적으로 get으로 받는 모든 데이터는 스트링으로 받아서 나중에 형변환한다.
+		//idx�쓽 寃쎌슦 int濡� 諛쏆쓣�닔�룄 �엳吏�留� 湲곕낯�쟻�쑝濡� get�쑝濡� 諛쏅뒗 紐⑤뱺 �뜲�씠�꽣�뒗 �뒪�듃留곸쑝濡� 諛쏆븘�꽌 �굹以묒뿉 �삎蹂��솚�븳�떎.
 		model.addAttribute("id", id);
 		DB dataReader = new DB("C:\\tomcat\\admin.sqlite", "admin");
 		dataReader.open();
@@ -66,7 +68,7 @@ public class HomeController {
 	
 
 	@RequestMapping(value = "/deletestudent_action", method = RequestMethod.GET)
-	//// UnsupportedEncodingException을 쓰는 이유는  encoder를 쓸때 다른 유형이 올 수도 있기 때문에 항상 있어야함
+	//// UnsupportedEncodingException�쓣 �벐�뒗 �씠�쑀�뒗  encoder瑜� �벝�븣 �떎瑜� �쑀�삎�씠 �삱 �닔�룄 �엳湲� �븣臾몄뿉 �빆�긽 �엳�뼱�빞�븿
 	public String tabledeleteAction(Locale locale, Model model,  @RequestParam("id") String id) {
 		model.addAttribute("id", id);
 		DB dataReader = new DB("C:\\tomcat\\admin.sqlite", "admin") ;
@@ -84,13 +86,13 @@ public class HomeController {
 		return "delete";
 	}
 	
-//	한솔
+//	�븳�넄
 	@RequestMapping(value = "/insert", method = RequestMethod.GET)
 	public String insert(Locale locale, Model model) {
 		return "insert";
 	}
 	
-//	3. insert.jsp에서 필요한 데이터를 받아와서 정보를 insert시켜줌
+//	3. insert.jsp�뿉�꽌 �븘�슂�븳 �뜲�씠�꽣瑜� 諛쏆븘���꽌 �젙蹂대�� insert�떆耳쒖쨲
 	@RequestMapping(value = "/insert_action", method = RequestMethod.POST)
 	public String insertAction(Locale locale, Model model, HttpServletRequest request) throws UnsupportedEncodingException {
 		request.setCharacterEncoding("UTF-8");
@@ -101,14 +103,60 @@ public class HomeController {
 		String address = request.getParameter("address");
 		int phone = Integer.parseInt(request.getParameter("phone"));
 		Teacher teacher = new Teacher(name, id, pw, nclass, address, phone);
-		DB dataReader = new DB("C:\\tomcat\\admin.sqlite", "admin");
-		dataReader.open();
+		DB db = new DB("C:\\tomcat\\admin.sqlite", "admin");
+		db.open();
 		try {
-			dataReader.insertData(teacher);
+			db.insertData(teacher);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		dataReader.close();
+		db.close();
 		return "redirect:/";
+	}
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String login(Locale locale, Model model) {
+	
+		return "login";
+	}
+	@RequestMapping(value = "/login_action", method = RequestMethod.POST)
+	public String login(Locale locale, Model model, HttpServletRequest request) throws UnsupportedEncodingException{
+		request.setCharacterEncoding("UTF-8");
+		//유저에게 id와 password를 파라미터로 전달 받음
+		String id = request.getParameter("id");
+		String password = request.getParameter("password");
+		DB db = new DB("C:\\tomcat\\admin.sqlite", "admin");
+		db.open();
+		//로그인 정보와 DB 정보의 일치여부를 확인히가 위한 boolean 변수 
+		boolean result = false;
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			byte[] hash = digest.digest(password.getBytes("UTF-8"));
+			StringBuffer hexString = new StringBuffer();
+
+			for (int i = 0; i < hash.length; i++) {
+				String hex = Integer.toHexString(0xff & hash[i]);
+				if (hex.length() == 1)
+					hexString.append('0');
+				hexString.append(hex);
+			}
+			System.out.println(hexString.toString());
+			//로그인 정보와 DB정보가 일치하는 경우 result는 true로 변환
+			result = db.login(id, hexString.toString());
+
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+		db.close();
+		//result가 true일 경우 session 유지를 진행
+		if (result) {
+			//session setting
+			HttpSession session = request.getSession();
+			session.setAttribute("is_login", "true");
+			return "secondhome";
+		}else {
+			//result가 false일 경우 session 만료
+			return "fail";
+		}
+
 	}
 }
