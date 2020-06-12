@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.kopo</groupId>
-	<artifactId>teamProject</artifactId>
-	<name>TeamProject</name>
+	<groupId>com.sol</groupId>
+	<artifactId>StudentAdministration</artifactId>
+	<name>StudentAdministration</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
@@ -40,6 +40,13 @@
 			<version>${org.aspectj-version}</version>
 		</dependency>	
 		
+		<!-- sqllight -->
+      <dependency> 
+         <groupId>org.xerial</groupId> 
+         <artifactId>sqlite-jdbc</artifactId> 
+         <version>3.27.2.1</version> 
+      </dependency>
+      
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -52,12 +59,6 @@
 			<version>${org.slf4j-version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- sqllight -->
-      <dependency> 
-         <groupId>org.xerial</groupId> 
-         <artifactId>sqlite-jdbc</artifactId> 
-         <version>3.27.2.1</version> 
-      </dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
