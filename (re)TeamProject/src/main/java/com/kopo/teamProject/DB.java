@@ -113,6 +113,23 @@ public class DB {
 		}
 		
 //		id 찾기
+		public boolean checkIdData(Teacher teacher) throws SQLException{
+			boolean result = false;
+			String query = "SELECT * FROM " + this.dbTableName + " WHERE name=? AND nclass=? AND phone=?; " ;
+			PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+			preparedStatement.setString(1, teacher.name);
+			preparedStatement.setString(2, teacher.nclass);
+			preparedStatement.setString(3, teacher.phone);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				result = true;
+			}
+			resultSet.close();
+			preparedStatement.close();
+			return result;
+		}
+		
+//		id 찾기
 		public Teacher selectData(Teacher teacher) throws SQLException{
 			String query = "SELECT * FROM " + this.dbTableName + " WHERE name=? AND nclass=? AND phone=?; " ;
 			PreparedStatement preparedStatement = this.connection.prepareStatement(query);

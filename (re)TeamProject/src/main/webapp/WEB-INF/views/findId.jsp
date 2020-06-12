@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>find Id</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/insert.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/findId.css">
 </head>
 <body>
 <form action="findId_action" method="post">

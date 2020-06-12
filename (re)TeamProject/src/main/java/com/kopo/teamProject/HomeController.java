@@ -95,7 +95,8 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/findId_action", method = RequestMethod.POST)
-	public String findIdAction(Locale locale, Model model, HttpServletRequest request) throws UnsupportedEncodingException {
+	public String findIdAction(Locale locale, Model model, HttpServletRequest request) throws UnsupportedEncodingException, SQLException {
+		boolean findId = false;
 		request.setCharacterEncoding("UTF-8");
 		String name = request.getParameter("name");
 		String nclass = request.getParameter("nclass");
@@ -104,18 +105,18 @@ public class HomeController {
 		System.out.println(check.name);
 		DB db = new DB("C:\\tomcat\\admin.sqlite", "admin");
 		db.open();
-		try {
+		
+		findId = db.checkIdData(check);
+		if (findId) {
 			Teacher teacher = db.selectData(check);
 			model.addAttribute("name", teacher.name);
 			model.addAttribute("id", teacher.id);
 			db.close();
 			return "success_findId";
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}
+		else {
 			db.close();
-			return "fail_findId";
+			return "findId";
 		}
 	}
 
