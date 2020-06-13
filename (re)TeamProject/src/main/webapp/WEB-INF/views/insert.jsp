@@ -10,21 +10,12 @@
 <body>
 <form action="insert_action" method="post">
 <strong>선생님 정보 등록</strong>
-<br>
-<br>
-	<input type="text" name="name" placeholder="name">
-	<br>
-	<input type="text" name="id" placeholder="id">
-	<br>
-	<input type="text" name="pw" placeholder="pw">
-	<br>
-	<input type="text" name="nclass" placeholder="nclass">
-	<br>
-	<br>
-	<input type="text" name="address" placeholder="address">
-	<br>
-	<br>
-	<input type="text" name="phone" placeholder="phone">
+	<p>name</p><input type="text" name="name" placeholder="name">
+	<p>id</p><input type="text" name="id" placeholder="id">
+	<p>pw</p><input type="text" name="pw" placeholder="pw">
+	<p>class</p><input type="text" name="nclass" placeholder="nclass">
+	<p>address</p><input type="text" name="address" placeholder="address">
+	<p>phone</p><input type="text" name="phone" placeholder="phone">
 	<br>
 	<br>
 	<input type="submit" value="선생님 등록">

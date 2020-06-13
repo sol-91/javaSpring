@@ -9,14 +9,13 @@
 </head>
 <body>
 <form action="findId_action" method="post">
-<strong>이름과 전화번호를 넣어주세요</strong>
+<strong>이름/반/전화번호를 넣어주세요</strong>
 <br>
 <br>
-	<input type="text" name="name" placeholder="name">
+	<p>name</p><input type="text" name="name" placeholder="name">
+	<p>class</p><input type="text" name="nclass" placeholder="nclass">
+	<p>phone</p><input type="text" name="phone" placeholder="phone">
 	<br>
-	<input type="text" name="nclass" placeholder="nclass">
-	<br>
-	<input type="text" name="phone" placeholder="phone">
 	<br>
 	<input type="submit" value="ID 찾기">
 	<br>
